@@ -30,12 +30,12 @@ Role Variables
 Dependencies
 ------------
 
-There are no any dependencies you need to wary about
+There are no any dependencies you need to worry about
 
 Run
 ----------------
-Befor run wp_deploy.yml need to set: wp_db_host_ip (private ip of database), and set ansible_hosts ip.
-For use wordpress deployment role just run wp_deploy.yml playbook. 
+Before you run wp_deploy.yml need to set: wp_db_host_ip (private ip of database), and set ansible_hosts ip.
+For wordpress deployment role just run wp_deploy.yml playbook. 
 
 
 License
