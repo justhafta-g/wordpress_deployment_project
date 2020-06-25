@@ -1,0 +1,7 @@
+---
+#Install nginx using nginx role 
+- hosts: web_stack
+  become: true
+  gather_facts: false
+  roles:
+    - nginx 

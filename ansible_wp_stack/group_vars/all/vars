@@ -1,0 +1,20 @@
+---
+wp_version: 5.4.2
+php_version: 7.4
+
+#set db ip address
+wp_db_host_ip: 172.31.32.226
+
+#MySQL Settings
+db_name: wpdb
+db_user: wpuser
+db_user_host: '%'
+db_pass: "{{ vault_db_pass }}"
+
+
+
+
+
+
+
+

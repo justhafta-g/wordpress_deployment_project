@@ -1,0 +1,40 @@
+--- 
+#Creatind directory if it doesn`t exist
+- name: create directory "/var/www" if it doesn't exist
+  file: 
+    path: "/var/www" 
+    state: directory 
+    owner: 1000 
+    group: 1000 
+    mode: 0755
+
+#Download wordpress to /tmp
+- name: download wordpress and plugins
+  get_url: 
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    mode: 0440
+  with_items:
+    - {url: 'https://wordpress.org/latest.tar.gz', dest: '/tmp'}
+
+#Unpackage wordpress to /var/www
+- name: unpackage wordpress
+  unarchive:  
+    src: "/tmp/wordpress-{{ wp_version }}.tar.gz"
+    dest: /var/www
+    remote_src: yes
+    group: www-data
+    owner: www-data
+
+#Template wp-config to /var/www
+- name: template a file to /var/www
+  template:
+    src: wp-config.php.j2
+    dest: /var/www/wp-config.php
+    owner: www-data
+    group: www-data
+    mode: '0755'
+
+
+
+

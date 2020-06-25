@@ -1,0 +1,98 @@
+---
+#Install requirements  
+- name: install apt extras
+  apt: 
+    name: "{{item}}"
+    update_cache: yes 
+    state: present
+  with_items:
+    - python-pip
+    - python-mysqldb
+    - python3-pip
+
+#Install requirements 
+- pip:
+    name: PyMySQL
+
+#Template .my.cnf to /root directory 
+- name: copy .my.cnf file with root password credentials
+  become: yes
+  template: 
+    src: my.cnf.j2 
+    dest: /root/.my.cnf 
+    owner: root 
+    mode: 0644 
+   
+#Add authenrucation key 
+- name: add official MySQL package authentication key
+  apt_key:
+    keyserver: pool.sks-keyservers.net
+    id: 5072E1F5
+    state: present
+
+#Add repository with mysql8
+- name: add MySQL repository
+  apt_repository:
+    repo: deb http://repo.mysql.com/apt/debian/ stretch mysql-8.0
+    filename: mysql80
+    state: present
+
+#Install lastest mysql (in this case MySQL 8)
+- name: install mysql-server
+  apt: 
+    name: mysql-server 
+    state: latest
+    update_cache: yes
+  notify: restart mysql
+
+#Update root password for root
+- name: ensure mysql root password is updated for all root accounts
+  mysql_user:
+    name: root
+    host: "{{ item }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    password: "{{ db_pass }}"
+    priv: '*.*:ALL,GRANT'
+    check_implicit_admin: true
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+  become: yes
+
+#Create database for wordpress 
+- name: create database
+  mysql_db: 
+    name: "{{ db_name }}"
+    state: present
+
+#Create user for wordpress     
+- name: create wp user
+  mysql_user: 
+    name: "{{ db_user_name }}" 
+    password: "{{ db_user_pass }}" 
+    priv: '{{ db_name }}.*:ALL'  
+    host: "{{ db_user_host }}"
+    state: present
+  notify: restart mysql
+
+#Make database available to all the devices
+- name: ensure mysql listening on all ports
+  lineinfile: dest=/etc/mysql/mysql.conf.d/mysqld.cnf regexp=^bind-address line="bind-address = 0.0.0.0"
+  notify: restart mysql
+
+- name: ensure mysql instaled
+  service: 
+    name: mysql 
+    state: started 
+    enabled: yes
+  
+ 
+  
+
+
+
+
+
+

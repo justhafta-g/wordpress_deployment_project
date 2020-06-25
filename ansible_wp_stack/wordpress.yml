@@ -1,0 +1,10 @@
+---
+#Downoloading and unpacking wordpress using wordpress role 
+- hosts: web_stack
+  become: true
+  gather_facts: true
+  roles:
+    - role: wordpress
+     
+
+  

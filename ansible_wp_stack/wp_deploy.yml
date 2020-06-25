@@ -1,0 +1,10 @@
+---
+#Deploying wordpress using roles: mysql, nginx, php-fpm, wordpress 
+- hosts: all
+  become: true
+  gather_facts: false
+ 
+- include: database.yml
+- include: wordpress.yml
+- include: nginx.yml 
+- include: php-fpm.yml

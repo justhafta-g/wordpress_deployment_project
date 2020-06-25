@@ -1,0 +1,10 @@
+---
+#Install database using mysql role
+- hosts: database
+  become: true
+  remote_user: root
+  roles:
+    - role: mysql 
+      db_user_name: "{{ db_user }}"
+      db_user_pass: "{{ db_pass }}"
+      db_user_host: '%'

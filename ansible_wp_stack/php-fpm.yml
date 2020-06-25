@@ -1,0 +1,7 @@
+---
+#Instaling php-fpm using php-fpm role 
+- hosts: web_stack
+  become: true
+  gather_facts: false
+  roles:
+    - php-fpm
