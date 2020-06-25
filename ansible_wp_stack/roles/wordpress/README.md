@@ -1,8 +1,7 @@
 Wordpress role
 =========
 
-Wordpress role
-
+Downloading and upacking wordpress
 
 Role Variables
 --------------
